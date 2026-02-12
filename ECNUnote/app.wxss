@@ -1,0 +1,37 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f8f8f8;
+}
+
+.main-map {
+  width: 100%;
+  flex: 1; /* 自动填充导航栏后的剩余空间 */
+  position: relative;
+}
+
+/* 按钮组定位 */
+.btns-l, .btns-r { position: absolute; bottom: 60rpx; display: flex; flex-direction: column; gap: 20rpx; }
+.btns-l { left: 30rpx; }
+.btns-r { right: 30rpx; }
+
+/* 传送按钮：白底红字，滴水湖蓝字 */
+.nav-btn {
+  background: #fff; color: #a41f35; padding: 15rpx 25rpx;
+  border-radius: 8rpx; font-size: 24rpx; font-weight: bold;
+  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.1); text-align: center;
+}
+.nav-btn.dsh { color: #003366; }
+
+/* 圆形功能键 */
+.circ {
+  width: 90rpx; height: 90rpx; border-radius: 45rpx;
+  background: #fff; display: flex; align-items: center;
+  justify-content: center; box-shadow: 0 4rpx 15rpx rgba(0,0,0,0.2);
+}
+.post { background: #a41f35; } /* 华师大红发布键 */
+
+/* 字符图标样式 */
+.itxt { color: #a41f35; font-size: 50rpx; font-weight: bold; line-height: 90rpx; }
+.iplus { color: #fff; font-size: 60rpx; line-height: 80rpx; }

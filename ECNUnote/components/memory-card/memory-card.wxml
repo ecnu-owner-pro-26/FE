@@ -1,0 +1,23 @@
+<view class="card-item" bindtap="onTapCard">
+  <view class="card-header">
+    <text class="loc-tag">📍 {{item.location_name}}</text>
+    <text class="time-tag">{{item.create_time}}</text>
+  </view>
+  <view class="card-body">
+    <view class="card-title">{{item.title}}</view>
+    <view class="card-desc">{{item.content}}</view>
+  </view>
+  <view class="card-footer">
+    <text class="stat">👁️ {{item.view_count || 0}}</text>
+
+    <like-button 
+      class="stat"
+      isLiked="{{item.is_liked}}" 
+      cnt="{{item.like_count}}" 
+      bind:change="onLikeTap"
+      catchtap="prevent" 
+    ></like-button>
+
+    <text class="stat">💬 {{item.comment_count || 0}}</text>
+  </view>
+</view>

@@ -1,0 +1,41 @@
+<view class="container">
+  <navigation-bar title="花狮地图" showBack="{{false}}"></navigation-bar>
+
+  <map id="mMap" class="main-map" latitude="{{lat}}" longitude="{{lng}}" markers="{{mks}}" scale="{{sc}}" show-location>
+    
+    <cover-view class="nav-box">
+      <cover-view wx:if="{{s==0}}" class="main-btn" bindtap="next" data-v="1">传送</cover-view>
+
+      <cover-view wx:if="{{s==1}}" class="menu">
+        <cover-view class="m-tit">选择校区</cover-view>
+        <cover-view class="m-item" bindtap="setSub" data-c="p">普陀校区</cover-view>
+        <cover-view class="m-item" bindtap="setSub" data-c="m">闵行校区</cover-view>
+        <cover-view class="m-item dsh" bindtap="setSub" data-c="d">滴水湖校区</cover-view>
+        <cover-view class="m-back" bindtap="next" data-v="0">取消</cover-view>
+      </cover-view>
+
+      <cover-view wx:if="{{s==2}}" class="menu">
+        <cover-view class="m-tit">{{cn}} - 类型</cover-view>
+        <cover-view class="m-item" bindtap="goB" data-t="L">图书馆 (直达)</cover-view>
+        <cover-view class="m-item" bindtap="setT" data-t="D">宿舍楼</cover-view>
+        <cover-view class="m-item" bindtap="setT" data-t="T">教学楼</cover-view>
+        <cover-view class="m-item" bindtap="setT" data-t="C">食堂</cover-view>
+        <cover-view class="m-back" bindtap="next" data-v="1">返回</cover-view>
+      </cover-view>
+
+      <cover-view wx:if="{{s==3}}" class="menu">
+        <cover-view class="m-tit">选择编号</cover-view>
+        <scroll-view scroll-y class="m-scroll">
+          <block wx:for="{{subList}}" wx:key="*this">
+            <cover-view class="m-item" bindtap="goFinal" data-n="{{item}}">{{item}}</cover-view>
+          </block>
+        </scroll-view>
+        <cover-view class="m-back" bindtap="next" data-v="2">返回</cover-view>
+      </cover-view>
+    </cover-view>
+
+    <cover-view class="btns-r">
+      <cover-view class="circ post" bindtap="toP">+</cover-view>
+    </cover-view>
+  </map>
+</view>

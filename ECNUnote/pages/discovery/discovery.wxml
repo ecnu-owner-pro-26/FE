@@ -1,0 +1,28 @@
+<view class="container">
+  <navigation-bar title="花狮广场" showBack="{{false}}"></navigation-bar>
+
+  <view class="filter-bar">
+    <view class="f-item {{c === 'all' ? 'active' : ''}}" bindtap="sel" data-v="all">全部</view>
+    <view class="f-item {{c === 'p' ? 'active' : ''}}" bindtap="sel" data-v="p">普陀</view>
+    <view class="f-item {{c === 'm' ? 'active' : ''}}" bindtap="sel" data-v="m">闵行</view>
+    <view class="f-item {{c === 'd' ? 'active' : ''}}" bindtap="sel" data-v="d">滴水湖</view>
+  </view>
+
+  <scroll-view scroll-y class="list-wrap" bindscrolltolower="more">
+    <view class="memory-list">
+      <block wx:for="{{ls}}" wx:key="id">
+        <memory-card 
+      item="{{item}}" 
+      data-id="{{item.id}}" 
+      bindtap="goToDetail" 
+      bind:like="onCardLike"
+  ></memory-card>
+      </block>
+      
+      <view class="status">
+        <text wx:if="{{loading}}">正在读取校区记忆...</text>
+        <text wx:if="{{!hasMore}}">—— 已经看到底了 ——</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

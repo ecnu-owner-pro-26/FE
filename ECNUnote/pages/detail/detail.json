@@ -1,0 +1,8 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "nav-bar": "/components/navigation-bar/navigation-bar",
+    "comment-item": "/components/comment-item/comment-item",
+    "like-button": "/components/like-button/like-button"
+  }
+}
