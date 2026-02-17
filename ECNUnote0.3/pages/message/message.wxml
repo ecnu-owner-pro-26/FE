@@ -1,0 +1,33 @@
+<view class="message-container">
+  <block wx:if="{{displayType === 'like'}}">
+    <view class="msg-item" wx:for="{{likeList}}" wx:key="id">
+      <view class="avatar-box"></view> <view class="msg-content">
+        <view class="msg-text">
+          <text class="user-name">{{item.userNickname}}</text> 
+          <text class="action-text">点赞了你的帖子</text>
+        </view>
+        <view class="post-preview">《{{item.postTitle}}》</view>
+        <view class="msg-time">{{item.time}}</view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="msg-item" wx:for="{{commentList}}" wx:key="id">
+      <view class="avatar-box"></view>
+      <view class="msg-content">
+        <view class="msg-text">
+          <text class="user-name">{{item.userNickname}}</text> 
+          <text class="action-text">回复了你：</text>
+        </view>
+        <view class="comment-bubble">{{item.content}}</view>
+        <view class="post-preview">原文：{{item.postTitle}}</view>
+        <view class="msg-time">{{item.time}}</view>
+      </view>
+    </view>
+  </block>
+
+  <view class="empty-state" wx:if="{{(displayType==='like' && likeList.length==0) || (displayType==='comment' && commentList.length==0)}}">
+    暂无新消息
+  </view>
+</view>

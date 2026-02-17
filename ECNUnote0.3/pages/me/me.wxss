@@ -1,0 +1,42 @@
+page { background: #f7f7f7; color: #333; }
+
+.user-card {
+  display: flex; align-items: center; padding: 50rpx 40rpx; background: #fff;
+}
+.avatar { width: 120rpx; height: 120rpx; border-radius: 60rpx; margin-right: 30rpx; background: #eee; }
+.nickname { font-size: 36rpx; font-weight: bold; margin-bottom: 10rpx; }
+.bio { font-size: 26rpx; color: #999; }
+.icon-arrow { width: 30rpx; height: 30rpx; opacity: 0.3; }
+
+.stats-bar {
+  display: flex; background: #fff; padding: 30rpx 0; margin-top: 2rpx;
+}
+.stat-item { flex: 1; text-align: center; position: relative; }
+.stat-num { font-size: 34rpx; font-weight: bold; display: inline-block; position: relative; }
+.plus-num { 
+  position: absolute; top: -10rpx; right: -35rpx;
+  font-size: 20rpx; color: #a41f35; font-weight: bold;
+}
+.stat-label { font-size: 24rpx; color: #888; margin-top: 6rpx; }
+
+.tabs-box { margin-top: 20rpx; background: #fff; }
+.tab-head { display: flex; border-bottom: 1rpx solid #eee; }
+.tab-title { 
+  flex: 1; text-align: center; padding: 30rpx 0; font-size: 28rpx; color: #666;
+}
+.tab-title.active { 
+  color: #a41f35; font-weight: bold; border-bottom: 4rpx solid #a41f35; 
+}
+
+/* 列表美化 */
+.post-card, .comment-card {
+  padding: 30rpx 40rpx; border-bottom: 1rpx solid #f9f9f9;
+}
+.post-title { font-size: 30rpx; margin-bottom: 15rpx; }
+.post-info { font-size: 24rpx; color: #bbb; }
+
+.comment-target {
+  font-size: 24rpx; color: #a41f35; background: #fff5f5;
+  display: inline-block; padding: 4rpx 12rpx; border-radius: 4rpx; margin-bottom: 10rpx;
+}
+.comment-content { font-size: 28rpx; margin-bottom: 10rpx; }

@@ -1,0 +1,23 @@
+<view class="container">
+  <view class="section avatar-section" bindtap="changeAvatar">
+    <text class="label">头像</text>
+    <view class="right-box">
+      <image class="edit-avatar" src="{{tempAvatar}}"></image>
+      <text class="arrow">〉</text>
+    </view>
+  </view>
+
+  <view class="form-group">
+    <view class="input-item">
+      <text class="label">昵称</text>
+      <input class="field" value="{{tempNickname}}" bindinput="onNicknameInput" placeholder="请输入昵称" />
+    </view>
+    
+    <view class="input-item">
+      <text class="label">简介</text>
+      <textarea class="field-bio" value="{{tempBio}}" bindinput="onBioInput" placeholder="介绍一下自己吧" maxlength="50" />
+    </view>
+  </view>
+
+  <button class="save-btn" bindtap="saveProfile">保存修改</button>
+</view>

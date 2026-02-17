@@ -1,0 +1,47 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/me/me",
+    "pages/message/message",
+    "pages/discovery/discovery",
+    "pages/post/post",
+    "pages/edit-profile/edit-profile",
+    "pages/detail/detail"
+  ],
+  "window": {
+    
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#a41f35",
+    "navigationBarTitleText": "花狮地图树洞",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#a41f35",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "地图"
+      },
+      {
+        "pagePath": "pages/discovery/discovery",
+        "text": "广场"
+      },
+      {
+        "pagePath": "pages/me/me", 
+        "text": "我的"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置将用于展示附近或指定校区的校园记忆"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation"
+  ],
+  "sitemapLocation": "sitemap.json"
+}

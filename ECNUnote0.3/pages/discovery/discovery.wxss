@@ -1,0 +1,42 @@
+.container { 
+  height: 100vh; 
+  display: flex; 
+  flex-direction: column; 
+  background: #f7f7f7; 
+}
+
+/* 筛选栏：提升层级，确保点击有效 */
+.filter-bar {
+  display: flex; 
+  background: #fff; 
+  padding: 20rpx 30rpx;
+  border-bottom: 1rpx solid #eee; 
+  justify-content: space-around;
+  position: relative; 
+  z-index: 10; /* 必须高于下方列表，低于导航栏 */
+}
+
+.f-item {
+  font-size: 26rpx; 
+  color: #666; 
+  padding: 10rpx 25rpx;
+  border-radius: 30rpx;
+}
+
+.f-item.active {
+  background: #a41f35; /* 华师大红 */
+  color: #fff; 
+  font-weight: bold;
+}
+
+/* 列表容器：解决“树洞没了”的高度问题 */
+.list-wrap { 
+  flex: 1; 
+  height: 0; /* 关键：触发 flex 伸缩逻辑 */
+}
+
+.memory-list {
+  padding: 20rpx 30rpx 40rpx 30rpx; /* 增加上下左右空白 */
+}
+
+.status { text-align: center; padding: 40rpx; font-size: 24rpx; color: #999; }

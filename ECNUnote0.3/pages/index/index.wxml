@@ -1,0 +1,43 @@
+<view class="container">
+  <navigation-bar title="花狮地图" showBack="{{false}}"></navigation-bar>
+
+  <map id="mMap" class="main-map" latitude="{{lat}}" longitude="{{lng}}" scale="{{sc}}" show-location bindregionchange="onRegionChange">
+    
+    <cover-view class="center-marker">
+      <cover-image class="marker-icon" src="/assets/icons/aim_red.png"></cover-image>
+      <cover-view class="marker-label">在这里发布</cover-view>
+    </cover-view>
+
+    <cover-view class="nav-box">
+      <cover-view wx:if="{{s==0}}" class="main-btn" catchtap="next" data-v="1">传送</cover-view>
+
+      <cover-view wx:if="{{s==1}}" class="menu">
+        <cover-view class="m-tit">选择校区</cover-view>
+        <cover-view class="m-item" catchtap="setSub" data-c="p">普陀校区</cover-view>
+        <cover-view class="m-item" catchtap="setSub" data-c="m">闵行校区</cover-view>
+        <cover-view class="m-item dsh" catchtap="setSub" data-c="d">滴水湖校区</cover-view>
+        <cover-view class="m-back" catchtap="next" data-v="0">取消</cover-view>
+      </cover-view>
+
+      <cover-view wx:if="{{s==2}}" class="menu">
+        <cover-view class="m-tit">{{cn}} - 类型</cover-view>
+        <cover-view class="m-item" catchtap="goB">图书馆 (直达)</cover-view>
+        <cover-view class="m-item" catchtap="setT" data-t="D">宿舍楼</cover-view>
+        <cover-view class="m-item" catchtap="setT" data-t="T">教学楼</cover-view>
+        <cover-view class="m-item" catchtap="setT" data-t="C">食堂</cover-view>
+        <cover-view class="m-back" catchtap="next" data-v="1">返回</cover-view>
+      </cover-view>
+
+      <cover-view wx:if="{{s==3}}" class="menu">
+        <cover-view class="m-tit">{{cn}} - 详情</cover-view>
+        <cover-view class="m-item" wx:for="{{subList}}" wx:key="n" catchtap="goFinal" data-item="{{item}}">{{item.n}}</cover-view>
+        <cover-view class="m-back" catchtap="next" data-v="2">返回</cover-view>
+      </cover-view>
+    </cover-view>
+
+    <cover-view class="post-btn" catchtap="toP">
+      <cover-view class="plus">+</cover-view>
+    </cover-view>
+
+  </map>
+</view>
