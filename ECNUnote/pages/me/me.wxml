@@ -1,0 +1,64 @@
+<view class="me-container">
+  <view class="user-card" bindtap="goToEditProfile">
+    <image class="avatar" src="{{userInfo.avatar}}"></image>
+    <view class="user-text">
+      <view class="nickname">{{userInfo.nickname}}</view>
+      <view class="bio">{{userInfo.bio}}</view>
+    </view>
+    <image class="icon-arrow" src="/assets/icons/arrow-right.png"></image>
+  </view>
+
+  <view class="stats-bar">
+    <view class="stat-item">
+      <view class="stat-num">{{stats.postCount}}</view>
+      <view class="stat-label">发布</view>
+    </view>
+    <view class="stat-item" bindtap="goToMessage" data-type="like">
+      <view class="stat-num">
+        {{stats.likeCount}}
+        <text class="plus-num" wx:if="{{stats.unreadLike > 0}}">+{{stats.unreadLike}}</text>
+      </view>
+      <view class="stat-label">获赞</view>
+    </view>
+    <view class="stat-item" bindtap="goToMessage" data-type="comment">
+      <view class="stat-num">
+        {{stats.commentCount}}
+        <text class="plus-num" wx:if="{{stats.unreadComment > 0}}">+{{stats.unreadComment}}</text>
+      </view>
+      <view class="stat-label">评论</view>
+    </view>
+  </view>
+
+  <view class="tabs-box">
+    <view class="tab-head">
+      <view class="tab-title {{currentTab==0?'active':''}}" bindtap="switchTab" data-index="0">我的帖子</view>
+      <view class="tab-title {{currentTab==1?'active':''}}" bindtap="switchTab" data-index="1">我的评论</view>
+    </view>
+    
+    <swiper current="{{currentTab}}" bindchange="onTabSwiperChange" style="height: 600rpx;">
+      <swiper-item>
+        <scroll-view scroll-y style="height: 100%;">
+          <view class="post-card" wx:for="{{myPosts}}" wx:key="id">
+            <view class="post-title">{{item.title}}</view>
+            <view class="post-info">
+              <text>{{item.time}}</text>
+              <text style="margin-left: 20rpx;">{{item.likes}} 赞</text>
+            </view>
+          </view>
+          <view class="empty-tip" wx:if="{{myPosts.length == 0}}">暂无帖子</view>
+        </scroll-view>
+      </swiper-item>
+      
+      <swiper-item>
+        <scroll-view scroll-y style="height: 100%;">
+          <view class="comment-card" wx:for="{{myComments}}" wx:key="id">
+            <view class="comment-target">回复了：{{item.targetTitle}}</view>
+            <view class="comment-content">{{item.myContent}}</view>
+            <view class="post-info">{{item.time}}</view>
+          </view>
+          <view class="empty-tip" wx:if="{{myComments.length == 0}}">暂无数据</view>
+        </scroll-view>
+      </swiper-item>
+    </swiper>
+  </view>
+</view>

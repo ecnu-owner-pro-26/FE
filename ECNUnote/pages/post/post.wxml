@@ -27,7 +27,11 @@
   </view>
 
   <view class="footer">
-    <view class="loc-tag">📍 {{lng}}, {{lat}}</view>
+    <view class="loc-tag">
+      <text>📍 </text>
+      <text>{{lng}}</text>
+      <text wx:if="{{lat}}">, {{lat}}</text>
+    </view>
     <button class="submit-btn" bindtap="submit">发布到树洞</button>
   </view>
 </view>

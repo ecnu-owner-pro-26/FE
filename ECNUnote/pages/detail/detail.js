@@ -1,7 +1,12 @@
+/**
+ * 树洞详情页 detail
+ * 功能：展示帖子内容、点赞、评论、回复
+ */
 const MemoryApi = require('../../api/memory');
 const CommentApi = require('../../api/comment');
 
 Page({
+  // ---------- 页面数据 ----------
   data: {
     info: {
       id: 0,
@@ -11,7 +16,9 @@ Page({
       content: '',
       like_count: 0,
       is_liked: false,
-      ip_location: '上海'
+      ip_location: '上海',
+      location_name: '',
+      images: []
     },
     comments: [
       { id: 1, nickname: "华师大小狮子", content: "沙发！", create_time: "刚刚" }
@@ -22,60 +29,55 @@ Page({
     inputFocus: false
   },
 
-// pages/detail/detail.js
-onLoad(options) {
-  console.log("📥 原始 options 检查:", options);
-  const id = Number(options.id); // 拿到 ID 并转为数字
+  // ---------- 生命周期 ----------
+  onLoad(options) {
+    const id = Number(options.id);
 
-  if (id) {
-    // 1. 这里直接定义和你广场页一模一样的 mock 数据
-    const mockData = [
-      { id: 1, title: "丽娃河的猫", content: "为了过冬囤了不少肉。", like_count: 10, is_liked: false },
-      { id: 2, title: "樱桃河午后", content: "这里的樱花已经有花苞了。", like_count: 25, is_liked: true },
-      { id: 3, title: "滴水湖远眺", content: "国软院的红墙配晚霞绝了。", like_count: 5, is_liked: false }
+    if (id) {
+      // 预设帖子：与地图红点对应（101→1, 102→2, 201→3, 202→4），后续可接接口
+      const mockData = [
+      { id: 1, title: "河西食堂的早餐", content: "豆浆油条永远的神，早起占座值得。", location_name: "河西食堂", like_count: 10, is_liked: false },
+      { id: 2, title: "理科楼自习一角", content: "期末复习中，窗外阳光正好。", location_name: "理科大楼", like_count: 25, is_liked: true },
+      { id: 3, title: "秋实阁的樱花", content: "这里的樱花已经有花苞了，下周应该会开。", location_name: "秋实阁", like_count: 8, is_liked: false },
+      { id: 4, title: "实验楼夜色", content: "国软院的红墙配晚霞绝了，随手一拍。", location_name: "实验楼", like_count: 5, is_liked: false }
     ];
 
-    // 2. 根据 ID 找到那条正确的数据
     const item = mockData.find(x => x.id === id);
 
     if (item) {
-      // 3. 把找到的数据塞进页面
-      // 在 detail.js 的 onLoad 里
-this.setData({
+      this.setData({
   'info.id': item.id,
   'info.title': item.title,
   'info.content': item.content,
-  // 优先使用 URL 传过来的实时状态，如果没有，再用 mock 的默认值
+  'info.location_name': item.location_name,
   'info.is_liked': options.is_liked === 'true' ? true : item.is_liked,
   'info.like_count': options.like_count ? Number(options.like_count) : item.like_count
 });
-      console.log("✅ 匹配成功，当前显示内容:", item.title);
     }
   }
 },
 
-  
+  // ---------- 点赞 ----------
   onLikeTap(e) {
     const { status } = e.detail;
     const oldCount = this.data.info.like_count;
 
-    // 直接修改详情页的 info 状态
     this.setData({
       'info.is_liked': status,
       'info.like_count': status ? oldCount + 1 : Math.max(0, oldCount - 1)
     });
-
-    // 提示：这里如果要做得更完美，可以使用本地缓存同步回广场页
     wx.showToast({
       title: status ? '点赞成功' : '取消点赞',
       icon: 'none'
     });
   },
 
+  // ---------- 评论与回复 ----------
   onInput(e) {
     this.setData({ commentText: e.detail.value });
   },
 
+  /** 点击某条评论的“回复”：占位符改为 @昵称，并聚焦输入框 */
   handleReplyTrigger(e) {
     const name = e.detail.name; 
     this.setData({
@@ -85,9 +87,9 @@ this.setData({
     });
   },
 
+  /** 提交评论：支持普通评论和 @回复，当前为模拟提交 */
   submitComment() {
     const text = this.data.commentText.trim();
-    const info = this.data.info;
 
     if (!text) {
       return wx.showToast({ title: '写点什么再发送吧', icon: 'none' });
@@ -118,6 +120,7 @@ this.setData({
     }, 500);
   },
 
+  // ---------- 图片预览 ----------
   preview(e) {
     if(!this.data.info.images) return;
     wx.previewImage({

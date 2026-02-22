@@ -1,18 +1,22 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/me/me",
+    "pages/message/message",
     "pages/discovery/discovery",
     "pages/post/post",
+    "pages/edit-profile/edit-profile",
     "pages/detail/detail"
   ],
   "window": {
-    "navigationStyle": "custom",
+    
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#a41f35",
     "navigationBarTitleText": "花狮地图树洞",
     "navigationBarTextStyle": "white"
   },
   "tabBar": {
+    "custom": true,
     "color": "#999999",
     "selectedColor": "#a41f35",
     "backgroundColor": "#ffffff",
@@ -25,6 +29,10 @@
       {
         "pagePath": "pages/discovery/discovery",
         "text": "广场"
+      },
+      {
+        "pagePath": "pages/me/me", 
+        "text": "我的"
       }
     ]
   },

@@ -3,6 +3,7 @@
 
   <view class="filter-bar">
     <view class="f-item {{c === 'all' ? 'active' : ''}}" bindtap="sel" data-v="all">全部</view>
+    <view class="f-item {{c === 'hot' ? 'active' : ''}}" bindtap="sel" data-v="hot">热门</view>
     <view class="f-item {{c === 'p' ? 'active' : ''}}" bindtap="sel" data-v="p">普陀</view>
     <view class="f-item {{c === 'm' ? 'active' : ''}}" bindtap="sel" data-v="m">闵行</view>
     <view class="f-item {{c === 'd' ? 'active' : ''}}" bindtap="sel" data-v="d">滴水湖</view>
