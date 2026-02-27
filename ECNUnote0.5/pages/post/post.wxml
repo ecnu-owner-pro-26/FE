@@ -1,0 +1,37 @@
+<view class="post-container">
+  <view class="nav-bar">
+    <view class="back-btn" bindtap="goBack">←</view>
+    <text class="nav-title">记录记忆</text>
+  </view>
+
+  <view class="content-body">
+    <textarea 
+      class="text-area" 
+      placeholder="此刻你在想什么？" 
+      bindinput="onInput"
+      maxlength="500"
+    ></textarea>
+
+    <view class="image-list">
+      <block wx:for="{{tempImages}}" wx:key="*this">
+        <view class="image-item">
+          <image src="{{item}}" mode="aspectFill" bindtap="previewImage" data-src="{{item}}"></image>
+          <view class="del-icon" bindtap="removeImage" data-index="{{index}}">×</view>
+        </view>
+      </block>
+      
+      <view class="add-box" bindtap="uploadImage" wx:if="{{tempImages.length < 9}}">
+        <text class="add-icon">+</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="footer">
+    <view class="loc-tag">
+      <text>📍 </text>
+      <text>{{lng}}</text>
+      <text wx:if="{{lat}}">, {{lat}}</text>
+    </view>
+    <button class="submit-btn" bindtap="submit">发布到树洞</button>
+  </view>
+</view>

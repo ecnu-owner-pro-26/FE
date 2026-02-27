@@ -1,0 +1,68 @@
+<view class="container">
+  <nav-bar title="狮友资料" showBack="{{true}}" backgroundColor="transparent" color="#fff"></nav-bar>
+
+  <view class="profile-header">
+    <image class="blur-bg" src="{{userInfo.avatar}}" mode="aspectFill"></image>
+    <view class="mask"></view>
+    
+    <view class="header-content">
+      <view class="avatar-wrapper">
+        <image class="profile-avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
+        <view class="gender-tag {{userInfo.gender === 1 ? 'male' : 'female'}}">
+          <text class="icon">{{userInfo.gender === 1 ? '♂' : '♀'}}</text>
+        </view>
+      </view>
+      
+      <view class="profile-text">
+        <text class="profile-name">{{userInfo.nickname}}</text>
+        <view class="id-tag">ID: {{userId}}</view>
+      </view>
+      
+      <text class="profile-bio">{{userInfo.bio || '这只狮子很神秘，还没写简介~'}}</text>
+    </view>
+    
+    <view class="stats-card">
+      <view class="stat-item">
+        <text class="num">{{userInfo.post_count || 0}}</text>
+        <text class="label">发布动态</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="num">{{userInfo.like_total || 0}}</text>
+        <text class="label">获得赞同</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="content-section">
+    <view class="section-header">
+      <text class="section-title">TA的记忆广场</text>
+      <view class="line"></view>
+    </view>
+
+    <scroll-view scroll-y class="post-list" enable-back-to-top>
+      <block wx:for="{{memories}}" wx:key="id">
+        <view class="memory-item" bindtap="goToDetail" data-id="{{item.id}}">
+          <view class="memory-time">
+            <text class="day">{{item.day || '27'}}</text>
+            <text class="month">{{item.month || 'Feb'}}</text>
+          </view>
+          <view class="memory-main">
+            <view class="memory-card">
+              <text class="memory-content">{{item.title || item.content}}</text>
+              <view class="memory-footer">
+                <text class="location">📍 {{item.location_name}}</text>
+                <text class="likes">❤️ {{item.like_count}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <view class="empty-state" wx:if="{{memories.length === 0}}">
+        <image src="/assets/icons/empty.png" mode="aspectFit"></image>
+        <text>TA还没有留下任何记忆...</text>
+      </view>
+    </scroll-view>
+  </view>
+</view>

@@ -1,0 +1,55 @@
+<!-- 地图页：花狮地图、树洞红点、快速传送、在此发布 -->
+<view class="container">
+  <navigation-bar title="花狮地图" showBack="{{false}}"></navigation-bar>
+
+  <!-- 地图：中心与缩放由 lat/lng/sc 控制，markers 为树洞红点 -->
+  <map 
+    id="mMap" 
+    class="main-map" 
+    latitude="{{lat}}" 
+    longitude="{{lng}}" 
+    scale="{{sc}}" 
+    markers="{{markers}}" 
+    show-location 
+    bindregionchange="onRegionChange"
+    bindmarkertap="onMarkerTap" 
+  >
+    <!-- 中心定位标识（旗帜图标），仅展示不响应点击 -->
+    <cover-view class="center-marker">
+      <cover-image class="marker-icon marker-flag" src="/assets/icons/flag.png"></cover-image>
+    </cover-view>
+
+    <!-- 左下角：快速传送菜单，s=0 按钮 / s=1 选校区 / s=2 选类型 / s=3 选具体地点 -->
+    <cover-view class="nav-box">
+      <cover-view wx:if="{{s === 0}}" class="main-btn" catchtap="next" data-v="1">快速传送</cover-view>
+      <cover-view wx:if="{{s === 1}}" class="menu">
+        <cover-view class="m-tit">选择校区</cover-view>
+        <cover-view class="m-item" catchtap="setSub" data-c="p">普陀校区</cover-view>
+        <cover-view class="m-item" catchtap="setSub" data-c="m">闵行校区</cover-view>
+        <cover-view class="m-item" catchtap="setSub" data-c="d">滴水湖</cover-view>
+        <cover-view class="m-back" catchtap="next" data-v="0">收起</cover-view>
+      </cover-view>
+      <cover-view wx:if="{{s === 2}}" class="menu">
+        <cover-view class="m-tit">{{cn}} · 选择类型</cover-view>
+        <cover-view class="m-item" catchtap="setT" data-t="C">食堂</cover-view>
+        <cover-view class="m-item" catchtap="setT" data-t="D">宿舍</cover-view>
+        <cover-view class="m-item" catchtap="setT" data-t="T">教学楼</cover-view>
+        <cover-view class="m-item" catchtap="goLibrary">图书馆</cover-view>
+        <cover-view class="m-back" catchtap="next" data-v="1">返回</cover-view>
+      </cover-view>
+      <cover-view wx:if="{{s === 3}}" class="menu">
+        <cover-view class="m-tit">选择地点</cover-view>
+        <cover-view wx:for="{{subList}}" wx:key="n" wx:for-index="idx" class="m-item" catchtap="goFinal" data-index="{{idx}}">{{item.n}}</cover-view>
+        <cover-view class="m-back" catchtap="next" data-v="2">返回</cover-view>
+      </cover-view>
+    </cover-view>
+
+    <!-- 右下角：在此发布，点击取地图中心坐标并跳转发布页 -->
+    <cover-view class="post-btn" catchtap="toP">
+      <cover-view class="post-btn-inner">
+        <cover-view class="plus">+</cover-view>
+        <cover-view class="post-label">发布</cover-view>
+      </cover-view>
+    </cover-view>
+  </map>
+</view>
