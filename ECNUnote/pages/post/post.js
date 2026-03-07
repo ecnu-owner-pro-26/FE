@@ -1,16 +1,22 @@
 /**
  * 发布页 post
- * 功能：输入内容、选图、使用地图中心坐标发布树洞（当前为模拟提交）
+ * 功能：输入内容、选图、使用地图中心坐标发布树洞，对接 POST /api/memories
  */
+const MemoryApi = require('../../api/memory');
+
 Page({
   data: {
     content: '',
     tempImages: [],
     lng: '正在定位...',
-    lat: ''
+    lat: '',
+    locationId: 1  // 默认地点ID，可从地图页传入 locationId
   },
 
   onLoad(options) {
+    if (options.locationId) {
+      this.setData({ locationId: parseInt(options.locationId, 10) });
+    }
     // 优先使用地图页传来的中心点坐标，否则尝试获取当前定位
     if (options.lng && options.lat && options.lng !== 'undefined') {
       this.setData({
@@ -69,25 +75,41 @@ Page({
     });
   },
 
-  /** 提交发布：内容或图片至少一项；当前为模拟，成功后返回上一页 */
+  /** 提交发布：调用 POST /api/memories，需要登录（JWT） */
   submit() {
-    if (!this.data.content && this.data.tempImages.length === 0) {
+    const content = (this.data.content || '').trim();
+    if (!content && this.data.tempImages.length === 0) {
       wx.showToast({ title: '内容不能为空', icon: 'none' });
       return;
     }
 
-    wx.showLoading({ title: '发送中...' });
+    const token = wx.getStorageSync('token');
+    if (!token) {
+      wx.showModal({
+        title: '需要登录',
+        content: '发布记忆需要先登录',
+        confirmText: '去登录',
+        success: (res) => { if (res.confirm) wx.navigateTo({ url: '/pages/login/login' }); }
+      });
+      return;
+    }
 
-    setTimeout(() => {
-      wx.hideLoading();
+    const title = content.length > 50 ? content.slice(0, 50) : content;
+    const locationId = this.data.locationId || 1;
+
+    MemoryApi.createMemory({
+      title,
+      content,
+      location_id: locationId,
+      is_public: true,
+      tags: []
+    }).then(() => {
       wx.showModal({
         title: '发布成功',
         content: '你的树洞已在地图上生成',
         showCancel: false,
-        success: () => {
-          wx.navigateBack();
-        }
+        success: () => { wx.navigateBack(); }
       });
-    }, 1000);
+    }).catch(() => {});
   }
 });

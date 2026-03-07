@@ -1,4 +1,0 @@
-<view class="l-btn {{isLiked ? 'active' : ''}}" bindtap="onTap">
-  <text class="icon">{{isLiked ? '❤️' : '🤍'}}</text>
-  <text class="cnt">{{cnt}}</text>
-</view>

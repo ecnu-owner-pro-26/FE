@@ -1,13 +1,19 @@
 /**
  * 小程序入口 app.js
- * 全局数据：userInfo、currentCampusId；启动时可做 token 校验与拉取用户信息
+ * 全局数据：userInfo、currentCampusId；启动时拉取用户信息（需 token）
  */
+const authApi = require('./api/auth');
+
 App({
   onLaunch() {
     console.log('ECNU Note Project Launched');
     const token = wx.getStorageSync('token');
     if (token) {
-      // 可在此调用 api/auth.js 获取最新 profile
+      authApi.getProfile().then((data) => {
+        this.globalData.userInfo = data;
+      }).catch(() => {});
+    } else {
+      wx.reLaunch({ url: '/pages/login/login' });
     }
   },
   globalData: {

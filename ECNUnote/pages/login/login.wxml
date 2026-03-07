@@ -1,2 +1,22 @@
-<!--pages/login/login.wxml-->
-<text>pages/login/login.wxml</text>
+<!--pages/login/login.wxml 微信快捷登录-->
+<view class="container">
+  <view class="title">微信快捷登录</view>
+  <view class="form">
+    <view class="avatar-row">
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image class="avatar-img" src="{{avatarUrl}}" mode="aspectFill" wx:if="{{avatarUrl}}" />
+        <view class="avatar-placeholder" wx:else>头像</view>
+        <text class="avatar-tip">点击选择头像</text>
+      </button>
+    </view>
+    <input
+      class="input"
+      type="nickname"
+      placeholder="请输入昵称"
+      value="{{nickname}}"
+      bindinput="onNicknameInput"
+    />
+    <button class="btn primary" bindtap="onWechatLogin">微信快捷登录</button>
+    <button class="btn link" bindtap="onCheckServer">查看服务器连接状态</button>
+  </view>
+</view>

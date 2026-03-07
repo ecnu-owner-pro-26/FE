@@ -1,64 +1,78 @@
-<view class="me-container">
-  <view class="user-card" bindtap="goToEditProfile">
-    <image class="avatar" src="{{userInfo.avatar}}"></image>
-    <view class="user-text">
-      <view class="nickname">{{userInfo.nickname}}</view>
-      <view class="bio">{{userInfo.bio}}</view>
-    </view>
-    <image class="icon-arrow" src="/assets/icons/arrow-right.png"></image>
-  </view>
-
-  <view class="stats-bar">
-    <view class="stat-item">
-      <view class="stat-num">{{stats.postCount}}</view>
-      <view class="stat-label">发布</view>
-    </view>
-    <view class="stat-item" bindtap="goToMessage" data-type="like">
-      <view class="stat-num">
-        {{stats.likeCount}}
-        <text class="plus-num" wx:if="{{stats.unreadLike > 0}}">+{{stats.unreadLike}}</text>
-      </view>
-      <view class="stat-label">获赞</view>
-    </view>
-    <view class="stat-item" bindtap="goToMessage" data-type="comment">
-      <view class="stat-num">
-        {{stats.commentCount}}
-        <text class="plus-num" wx:if="{{stats.unreadComment > 0}}">+{{stats.unreadComment}}</text>
-      </view>
-      <view class="stat-label">评论</view>
-    </view>
-  </view>
-
-  <view class="tabs-box">
-    <view class="tab-head">
-      <view class="tab-title {{currentTab==0?'active':''}}" bindtap="switchTab" data-index="0">我的帖子</view>
-      <view class="tab-title {{currentTab==1?'active':''}}" bindtap="switchTab" data-index="1">我的评论</view>
-    </view>
+<view class="container">
+  <view class="header-section">
+    <image class="main-bg" 
+           src="{{userInfo.bgImage || 'https://images.unsplash.com/photo-1518173946687-a4c8a9b746f5'}}" 
+           mode="aspectFill" 
+           bindtap="changeBackground"></image>
+    <view class="bg-mask"></view>
     
-    <swiper current="{{currentTab}}" bindchange="onTabSwiperChange" style="height: 600rpx;">
-      <swiper-item>
-        <scroll-view scroll-y style="height: 100%;">
-          <view class="post-card" wx:for="{{myPosts}}" wx:key="id">
-            <view class="post-title">{{item.title}}</view>
-            <view class="post-info">
-              <text>{{item.time}}</text>
-              <text style="margin-left: 20rpx;">{{item.likes}} 赞</text>
+    <view class="user-card-wrap" bindtap="goToEdit">
+      <view class="avatar-group">
+        <image class="user-avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
+        <view class="edit-badge-inner">✎</view>
+      </view>
+      <view class="user-text">
+        <text class="user-name">{{userInfo.nickname}}</text>
+        <text class="user-bio">{{userInfo.bio || '有趣的人，总会相遇'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="float-stats-bar">
+    <view class="stat-unit" bindtap="scrollToContent">
+      <text class="stat-num">12</text>
+      <text class="stat-name">发布</text>
+    </view>
+    <view class="divider"></view>
+    <view class="stat-unit" bindtap="navToLikes">
+      <view class="num-wrapper">
+        <text class="stat-num">88</text>
+        <view class="red-dot" wx:if="{{unreadLikes > 0}}">{{unreadLikes}}</view>
+      </view>
+      <text class="stat-name">获赞</text>
+    </view>
+    <view class="divider"></view>
+    <view class="stat-unit" bindtap="navToReceivedComments">
+      <view class="num-wrapper">
+        <text class="stat-num">5</text>
+        <view class="red-dot" wx:if="{{unreadComments > 0}}">{{unreadComments}}</view>
+      </view>
+      <text class="stat-name">消息</text>
+    </view>
+  </view>
+
+  <view class="content-area" id="content-nodes">
+    <view class="sticky-tabs">
+      <view class="tab-box {{currentTab == 0 ? 'active' : ''}}" bindtap="switchTab" data-index="0">
+        <text>我的帖子</text>
+        <view class="tab-indicator"></view>
+      </view>
+      <view class="tab-box {{currentTab == 1 ? 'active' : ''}}" bindtap="switchTab" data-index="1">
+        <text>参与评论</text>
+        <view class="tab-indicator"></view>
+      </view>
+    </view>
+
+    <view class="post-list">
+      <block wx:if="{{displayList.length > 0}}">
+        <view class="luxury-card" wx:for="{{displayList}}" wx:key="id" bindtap="handleItemTap" data-id="{{item.id}}" data-postid="{{item.postId}}">
+          <view class="card-body">
+            <text class="card-title">{{item.title}}</text>
+          </view>
+          <view class="card-foot">
+            <view class="foot-left">
+              <text class="foot-time">{{item.time}}</text>
+            </view>
+            <view class="foot-right">
+              <text class="btn-detail">{{currentTab == 0 ? item.likes + ' 赞' : '查看详情'}}</text>
             </view>
           </view>
-          <view class="empty-tip" wx:if="{{myPosts.length == 0}}">暂无帖子</view>
-        </scroll-view>
-      </swiper-item>
-      
-      <swiper-item>
-        <scroll-view scroll-y style="height: 100%;">
-          <view class="comment-card" wx:for="{{myComments}}" wx:key="id">
-            <view class="comment-target">回复了：{{item.targetTitle}}</view>
-            <view class="comment-content">{{item.myContent}}</view>
-            <view class="post-info">{{item.time}}</view>
-          </view>
-          <view class="empty-tip" wx:if="{{myComments.length == 0}}">暂无数据</view>
-        </scroll-view>
-      </swiper-item>
-    </swiper>
+        </view>
+      </block>
+      <view class="empty-status" wx:else>
+        <image src="/assets/empty.png" mode="aspectFit" class="empty-img"></image>
+        <text>还没有留下足迹呢</text>
+      </view>
+    </view>
   </view>
 </view>

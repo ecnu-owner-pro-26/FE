@@ -3,13 +3,12 @@
 
   <scroll-view scroll-y class="scroll-area">
     <view class="main-content">
-      <view class="user-meta">
-        <image class="avatar" src="{{info.avatar}}"></image>
-        <view class="user-info">
-          <text class="nickname">{{info.is_public ? info.nickname : '匿名狮子'}}</text>
-          <text class="ip-tag">来自：{{info.ip_location || '未知'}}</text>
-        </view>
-      </view>
+      <view class="user-meta" bindtap="goToOthersProfile" data-userid="{{info.user_id}}">
+  <image class="avatar" src="{{info.avatar}}"></image>
+  <view class="user-info">
+    <text class="nickname">{{info.nickname || '点我跳转'}}</text>
+  </view>
+</view>
 
       <view class="text-content">
         <text class="title">{{info.title}}</text>

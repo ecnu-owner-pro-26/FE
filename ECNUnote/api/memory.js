@@ -14,6 +14,26 @@ const memoryApi = {
   },
 
   /**
+   * 获取记忆详情
+   * @param {number|string} id 记忆ID
+   * 对应接口: GET /memories/:id
+   */
+  getMemoryDetail(id) {
+    return request(`/memories/${id}`, 'GET');
+  },
+
+  /**
+   * 获取记忆列表（全部/热门等，若后端支持）
+   * @param {Object} params 如 { page, page_size, sort: 'hot', campus_id }
+   */
+  getMemories(params) {
+    const query = params && Object.keys(params).length
+      ? Object.keys(params).map((k) => `${k}=${encodeURIComponent(params[k])}`).join('&')
+      : '';
+    return request(query ? `/memories?${query}` : '/memories', 'GET', {}, false);
+  },
+
+  /**
    * 获取地点关联的记忆列表
    * @param {number|string} locationId 
    * 对应接口: GET /locations/:id/memories

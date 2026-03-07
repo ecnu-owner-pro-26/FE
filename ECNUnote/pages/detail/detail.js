@@ -5,6 +5,16 @@
 const MemoryApi = require('../../api/memory');
 const CommentApi = require('../../api/comment');
 
+function formatTime(str) {
+  if (!str) return '';
+  const d = new Date(str);
+  const diff = (Date.now() - d.getTime()) / 1000;
+  if (diff < 60) return '刚刚';
+  if (diff < 3600) return Math.floor(diff / 60) + '分钟前';
+  if (diff < 86400) return Math.floor(diff / 3600) + '小时前';
+  return d.toLocaleDateString();
+}
+
 Page({
   // ---------- 页面数据 ----------
   data: {
@@ -32,43 +42,54 @@ Page({
   // ---------- 生命周期 ----------
   onLoad(options) {
     const id = Number(options.id);
+    if (!id) return;
 
-    if (id) {
-      // 预设帖子：与地图红点对应（101→1, 102→2, 201→3, 202→4），后续可接接口
-      const mockData = [
-      { id: 1, title: "河西食堂的早餐", content: "豆浆油条永远的神，早起占座值得。", location_name: "河西食堂", like_count: 10, is_liked: false },
-      { id: 2, title: "理科楼自习一角", content: "期末复习中，窗外阳光正好。", location_name: "理科大楼", like_count: 25, is_liked: true },
-      { id: 3, title: "秋实阁的樱花", content: "这里的樱花已经有花苞了，下周应该会开。", location_name: "秋实阁", like_count: 8, is_liked: false },
-      { id: 4, title: "实验楼夜色", content: "国软院的红墙配晚霞绝了，随手一拍。", location_name: "实验楼", like_count: 5, is_liked: false }
-    ];
-
-    const item = mockData.find(x => x.id === id);
-
-    if (item) {
+    this.memoryId = id;
+    // 从接口拉取记忆详情
+    MemoryApi.getMemoryDetail(id).then((data) => {
+      const creator = data.creator || {};
       this.setData({
-  'info.id': item.id,
-  'info.title': item.title,
-  'info.content': item.content,
-  'info.location_name': item.location_name,
-  'info.is_liked': options.is_liked === 'true' ? true : item.is_liked,
-  'info.like_count': options.like_count ? Number(options.like_count) : item.like_count
-});
-    }
-  }
-},
+        'info.id': data.id,
+        'info.title': data.title || '无标题',
+        'info.content': data.content || '',
+        'info.location_name': data.location_name || '',
+        'info.like_count': data.like_count || 0,
+        'info.is_liked': !!data.is_liked,
+        'info.avatar': creator.avatar || this.data.info.avatar,
+        'info.nickname': creator.nickname || '校友',
+        'info.images': data.images || []
+      });
+    }).catch(() => {
+      this.setData({ 'info.title': '加载失败' });
+    });
+
+    // 拉取评论列表
+    CommentApi.getCommentList(id).then((data) => {
+      const comments = (data || []).map((c) => ({
+        id: c.id,
+        nickname: (c.creator && c.creator.nickname) || '校友',
+        content: c.content,
+        create_time: c.created_at ? formatTime(c.created_at) : ''
+      }));
+      this.setData({ comments });
+    }).catch(() => {});
+  },
 
   // ---------- 点赞 ----------
   onLikeTap(e) {
     const { status } = e.detail;
+    const id = this.memoryId || this.data.info.id;
     const oldCount = this.data.info.like_count;
 
-    this.setData({
-      'info.is_liked': status,
-      'info.like_count': status ? oldCount + 1 : Math.max(0, oldCount - 1)
-    });
-    wx.showToast({
-      title: status ? '点赞成功' : '取消点赞',
-      icon: 'none'
+    const fn = status ? MemoryApi.likeMemory(id) : MemoryApi.unlikeMemory(id);
+    fn.then(() => {
+      this.setData({
+        'info.is_liked': status,
+        'info.like_count': status ? oldCount + 1 : Math.max(0, oldCount - 1)
+      });
+      wx.showToast({ title: status ? '点赞成功' : '取消点赞', icon: 'none' });
+    }).catch(() => {
+      this.setData({ 'info.is_liked': !status });
     });
   },
 
@@ -87,37 +108,32 @@ Page({
     });
   },
 
-  /** 提交评论：支持普通评论和 @回复，当前为模拟提交 */
+  /** 提交评论：调用接口 POST /api/memories/:id/comments */
   submitComment() {
     const text = this.data.commentText.trim();
-
     if (!text) {
       return wx.showToast({ title: '写点什么再发送吧', icon: 'none' });
     }
 
-    const newComment = {
-      id: Date.now(),
-      nickname: "我 (模拟用户)",
-      content: this.data.replyTargetUser ? `@${this.data.replyTargetUser} ${text}` : text,
-      create_time: "刚刚"
-    };
-  
-    wx.showLoading({ title: '发送中...' });
-  
-    setTimeout(() => {
-      wx.hideLoading();
-      const newCommentsList = [newComment, ...this.data.comments];
-      
+    const memoryId = this.memoryId || this.data.info.id;
+    const content = this.data.replyTargetUser ? `@${this.data.replyTargetUser} ${text}` : text;
+
+    CommentApi.createComment(memoryId, content).then((data) => {
+      const newComment = {
+        id: data.id,
+        nickname: (data.creator && data.creator.nickname) || '我',
+        content: data.content,
+        create_time: '刚刚'
+      };
       this.setData({
-        comments: newCommentsList,
+        comments: [newComment, ...this.data.comments],
         commentText: '',
         replyTargetUser: null,
         inputPlaceholder: '说点什么...',
         inputFocus: false
       });
-  
-      wx.showToast({ title: '发送成功(模拟)' });
-    }, 500);
+      wx.showToast({ title: '发送成功' });
+    }).catch(() => {});
   },
 
   // ---------- 图片预览 ----------
@@ -126,6 +142,23 @@ Page({
     wx.previewImage({
       current: e.currentTarget.dataset.url,
       urls: this.data.info.images
+    });
+  },
+
+   // ---------- 跳转他人页面 ----------
+   goToOthersProfile(e) {
+    const userId = e.currentTarget.dataset.userid|| 10086;
+    const isPublic = this.data.info.is_public;
+
+    // 如果是匿名发布的，通常不允许查看主页
+    
+    console.log("正在尝试跳转到用户主页，ID为:", userId);
+    wx.navigateTo({
+      url: `/pages/user-home/user-home?id=${userId}`,
+      fail: (err) => {
+        console.error("跳转失败，请检查 app.json 是否注册了该页面", err);
+        wx.showToast({ title: '页面还没创建', icon: 'none' });
+      }
     });
   }
 });

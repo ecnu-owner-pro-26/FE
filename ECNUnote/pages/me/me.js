@@ -1,63 +1,91 @@
 Page({
-  onShow() {
-    const bar = this.getTabBar && this.getTabBar();
-    if (bar) bar.setData({ selected: 2 });
-  },
   data: {
-    userInfo: { 
-      nickname: 'ECNU 小狮子', 
-      avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png', 
-      bio: '热爱丽娃河，也爱樱桃河。' 
+    userInfo: {
+      nickname: 'ECNU 小狮子',
+      avatar: 'https://mmbiz.qpic.cn/mmbiz_png/icTdbqWNOwNRna42FI242Lcia07afakS2Aia07v89ibYy6m6ia6qicic427XpA7S6jXicicicWtiaib6Qicibicia4iaa849Wic5Wv9Q/0',
+      bio: '热爱丽娃河，也爱樱桃河。',
+      bgImage: ''
     },
-    stats: { 
-      postCount: 12, 
-      likeCount: 88, 
-      commentCount: 5, 
-      unreadLike: 2, 
-      unreadComment: 5 
-    },
+    unreadLikes: 2,
+    unreadComments: 5, 
     currentTab: 0,
+    displayList: [],
     myPosts: [
-      { id: 1, title: '丽娃河的猫：为了过冬囤了不少肉', time: '2026-02-10', likes: 10 },
-      { id: 2, title: '滴水湖远眺：国软院红墙配晚霞绝了', time: '2026-02-09', likes: 5 }
+      { id: 1001, title: '丽娃河的猫：今天又在图书馆门口营业了', time: '2026-02-10', likes: 15 },
+      { id: 1002, title: '华师大樱桃河的晚霞真的无敌', time: '2026-02-09', likes: 21 }
     ],
     myComments: [
-      { id: 101, targetTitle: '食堂红烧肉', myContent: '确实好吃！', time: '2026-02-11' }
+      { id: 2001, postId: 1001, title: '我也见过它，它真的很亲人！', time: '2026-02-11' }
     ]
   },
 
-  // 1. 跳转到资料修改页
-  goToEditProfile() {
-    console.log("正在尝试跳转到修改资料页...");
-    wx.navigateTo({
-      url: '/pages/edit-profile/edit-profile',
-      fail: (err) => {
-        console.error("跳转失败，请检查 app.json 是否注册了该路径", err);
-        wx.showToast({ title: '页面路径错误', icon: 'none' });
+  onShow() {
+    // 每次进入页面重新获取缓存
+    const info = wx.getStorageSync('userInfo');
+    if (info) {
+      this.setData({
+        'userInfo.nickname': info.nickname || this.data.userInfo.nickname,
+        'userInfo.avatar': info.avatar || this.data.userInfo.avatar,
+        'userInfo.bio': info.bio || this.data.userInfo.bio,
+        'userInfo.bgImage': info.bgImage || this.data.userInfo.bgImage
+      });
+    }
+    this.refreshList();
+  },
+
+  changeBackground() {
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['compressed'],
+      success: (res) => {
+        const path = res.tempFilePaths[0];
+        let userInfo = this.data.userInfo;
+        userInfo.bgImage = path;
+        this.setData({ userInfo });
+        wx.setStorageSync('userInfo', userInfo);
+        wx.vibrateShort(); // 轻微震动反馈，增加精致感
+        wx.showToast({ title: '已更换背景', icon: 'none' });
       }
     });
   },
 
-  // 2. 跳转到消息详情页
-  goToMessage(e) {
-    const type = e.currentTarget.dataset.type;
-    wx.navigateTo({
-      url: `/pages/message/message?type=${type}`
-    });
+  handleItemTap(e) {
+    const { id, postid } = e.currentTarget.dataset;
+    let url = this.data.currentTab === 0 
+      ? `/pages/detail/detail?id=${id}` 
+      : `/pages/detail/detail?id=${postid}&commentId=${id}`;
     
-    // 静默清除红点
-    setTimeout(() => {
-      if(type === 'like') this.setData({ 'stats.unreadLike': 0 });
-      if(type === 'comment') this.setData({ 'stats.unreadComment': 0 });
-    }, 1000);
+    wx.navigateTo({ url });
   },
 
-  // 3. Tab 切换逻辑
+  goToEdit() {
+    wx.navigateTo({ url: '/pages/edit-profile/edit-profile' });
+  },
+
+  refreshList() {
+    this.setData({ 
+      displayList: this.data.currentTab === 0 ? this.data.myPosts : this.data.myComments 
+    });
+  },
+
   switchTab(e) {
-    this.setData({ currentTab: e.currentTarget.dataset.index });
+    const index = parseInt(e.currentTarget.dataset.index);
+    if (this.data.currentTab === index) return;
+    this.setData({ currentTab: index });
+    this.refreshList();
   },
 
-  onTabSwiperChange(e) {
-    this.setData({ currentTab: e.detail.current });
+  navToLikes() {
+    this.setData({ unreadLikes: 0 });
+    wx.navigateTo({ url: '/pages/message/message?type=like' });
+  },
+
+  navToReceivedComments() {
+    this.setData({ unreadComments: 0 });
+    wx.navigateTo({ url: '/pages/message/message?type=comment' });
+  },
+
+  scrollToContent() {
+    wx.pageScrollTo({ selector: '#content-nodes', duration: 400 });
   }
-})
+});
