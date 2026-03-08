@@ -1,0 +1,5 @@
+.l-btn { display: flex; align-items: center; gap: 10rpx; padding: 10rpx 20rpx; border-radius: 30rpx; background: #f5f5f5; width: fit-content; }
+.l-btn.active { background: #fff1f1; }
+.icon { font-size: 32rpx; }
+.cnt { font-size: 26rpx; color: #666; }
+.active .cnt { color: #a41f35; }

@@ -1,0 +1,6 @@
+.comment-item { padding: 20rpx 0; border-bottom: 1rpx solid #eee; }
+.user-row { display: flex; justify-content: space-between; margin-bottom: 10rpx; }
+.u-name { font-size: 26rpx; font-weight: bold; color: #555; }
+.u-time { font-size: 22rpx; color: #bbb; }
+.u-content { font-size: 28rpx; color: #333; line-height: 1.5; }
+.reply-tag { color: #a41f35; font-weight: bold; }

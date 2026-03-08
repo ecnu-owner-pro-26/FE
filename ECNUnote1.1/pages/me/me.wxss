@@ -1,0 +1,86 @@
+.container { min-height: 100vh; background: #F4F6F9; }
+
+/* 1. 沉浸式顶部 */
+.header-section { position: relative; height: 540rpx; width: 100%; }
+.main-bg { width: 100%; height: 100%; position: absolute; z-index: 1; filter: brightness(0.9); transition: all 0.5s ease; }
+.bg-mask { 
+  position: absolute; width: 100%; height: 100%; z-index: 2;
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%);
+  pointer-events: none; 
+}
+
+/* 2. 用户资料卡（沉浸式排版） */
+.user-card-wrap { 
+  position: absolute; z-index: 5; bottom: 120rpx; left: 40rpx; right: 40rpx;
+  display: flex; align-items: center; 
+}
+.avatar-group { position: relative; }
+.user-avatar { 
+  width: 150rpx; height: 150rpx; border-radius: 50%; 
+  border: 6rpx solid rgba(255,255,255,0.8); 
+  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.2); 
+}
+.edit-badge-inner { 
+  position: absolute; bottom: 5rpx; right: 5rpx; background: #A41F35; color: #fff;
+  width: 44rpx; height: 44rpx; border-radius: 50%; display: flex; align-items: center; 
+  justify-content: center; font-size: 24rpx; border: 4rpx solid #fff;
+}
+.user-text { margin-left: 30rpx; color: #fff; text-shadow: 0 4rpx 12rpx rgba(0,0,0,0.4); }
+.user-name { font-size: 48rpx; font-weight: 800; display: block; letter-spacing: 2rpx; }
+.user-bio { font-size: 26rpx; opacity: 0.9; margin-top: 12rpx; display: block; }
+
+/* 3. 悬浮统计栏：采用极简白 */
+.float-stats-bar {
+  position: relative; z-index: 10; margin: -60rpx 30rpx 0; background: #fff; 
+  border-radius: 32rpx; display: flex; padding: 45rpx 0; 
+  box-shadow: 0 12rpx 40rpx rgba(0,0,0,0.06);
+}
+.stat-unit { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+.divider { width: 1rpx; height: 40rpx; background: #F0F0F0; align-self: center; }
+.stat-num { font-size: 42rpx; font-family: 'DIN Alternate', sans-serif; font-weight: bold; color: #222; }
+.stat-name { font-size: 24rpx; color: #888; margin-top: 10rpx; font-weight: 300; }
+.num-wrapper { position: relative; display: flex; align-items: center; }
+.red-dot { 
+  position: absolute; top: -10rpx; right: -25rpx; background: #A41F35; 
+  color: #fff; font-size: 18rpx; padding: 2rpx 10rpx; border-radius: 20rpx;
+  box-shadow: 0 4rpx 8rpx rgba(164,31,53,0.3);
+}
+
+/* 4. Tab 导航 */
+.sticky-tabs { 
+  display: flex; background: #F4F6F9; padding: 40rpx 30rpx 20rpx; 
+  position: sticky; top: 0; z-index: 15;
+}
+.tab-box { margin-right: 50rpx; position: relative; padding-bottom: 10rpx; }
+.tab-box text { font-size: 30rpx; color: #999; transition: 0.3s; }
+.tab-box.active text { color: #222; font-weight: bold; font-size: 34rpx; }
+.tab-indicator { 
+  position: absolute; bottom: 0; left: 0; width: 0; height: 6rpx; 
+  background: #A41F35; transition: 0.3s; border-radius: 4rpx; 
+}
+.tab-box.active .tab-indicator { width: 100%; }
+
+/* 5. 奢华卡片流 */
+.post-list { padding: 0 30rpx; }
+.luxury-card { 
+  background: #fff; padding: 40rpx; border-radius: 32rpx; margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.02); transition: 0.2s;
+}
+.luxury-card:active { transform: scale(0.98); background: #fcfcfc; }
+.card-title { font-size: 32rpx; color: #1a1a1a; font-weight: 500; line-height: 1.6; }
+.card-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 30rpx; }
+.foot-time { font-size: 24rpx; color: #bbb; }
+.btn-detail { 
+  font-size: 24rpx; color: #A41F35; font-weight: 600; 
+  background: rgba(164,31,53,0.06); padding: 8rpx 24rpx; border-radius: 100rpx;
+}
+
+/* 空状态：字号参照签名(user-bio 26rpx)，居中，高度取“参与评论”与“广场”按钮的中值 */
+.empty-status {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 50vh; padding: 40rpx; box-sizing: border-box;
+}
+.empty-img { width: 200rpx; height: 200rpx; margin-bottom: 24rpx; }
+.empty-text {
+  font-size: 26rpx; color: #888; text-align: center;
+}

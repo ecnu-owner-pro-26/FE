@@ -1,0 +1,63 @@
+/* 地图页样式 */
+.container { height: 100vh; display: flex; flex-direction: column; }
+.main-map { width: 100%; flex: 1; position: relative; }
+
+/* 左下角快速传送（留出底栏高度 100rpx + 安全区，避免被挡住） */
+.nav-box { position: absolute; left: 30rpx; bottom: 160rpx; z-index: 1000; }
+.main-btn {
+  background: #a41f35;
+  color: #fff;
+  padding: 28rpx 52rpx;
+  border-radius: 50rpx;
+  font-weight: bold;
+  font-size: 32rpx;
+  box-shadow: 0 6rpx 20rpx rgba(164, 31, 53, 0.35);
+}
+
+.menu {
+  background: rgba(255, 255, 255, 0.98);
+  width: 320rpx;
+  border-radius: 20rpx;
+  padding: 12rpx 0;
+  box-shadow: 0 8rpx 28rpx rgba(0,0,0,0.12);
+}
+.m-tit { font-size: 24rpx; color: #888; padding: 16rpx 20rpx; border-bottom: 1rpx solid #eee; }
+.m-item { padding: 26rpx 20rpx; font-size: 30rpx; color: #333; border-bottom: 1rpx solid #f5f5f5; }
+.m-back { padding: 22rpx; font-size: 26rpx; color: #a41f35; text-align: center; font-weight: 500; }
+
+/* 地图中心定位标识（旗帜） */
+.center-marker {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  display: flex; flex-direction: column; align-items: center;
+}
+.marker-icon { width: 64rpx; height: 64rpx; }
+.marker-flag { width: 56rpx; height: 72rpx; }
+
+/* 右下角：定位在上、发布在下 */
+.post-column {
+  position: absolute; right: 40rpx; bottom: 160rpx; z-index: 1000;
+  display: flex; flex-direction: column; align-items: center; gap: 16rpx;
+}
+.loc-btn {
+  width: 120rpx; padding: 16rpx 0;
+  background: rgba(255,255,255,0.95);
+  color: #a41f35;
+  font-size: 24rpx; font-weight: 600;
+  text-align: center;
+  border-radius: 50rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.1);
+}
+.post-btn {
+  display: flex; align-items: center; justify-content: center;
+}
+.post-btn-inner {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 120rpx; height: 120rpx;
+  background: #a41f35;
+  border-radius: 50%;
+  box-shadow: 0 8rpx 24rpx rgba(164, 31, 53, 0.4);
+}
+.plus { color: #fff; font-size: 64rpx; font-weight: 200; line-height: 1; }
+.post-label { color: rgba(255,255,255,0.95); font-size: 24rpx; margin-top: 6rpx; font-weight: 500; }
