@@ -1,36 +1,51 @@
+const authApi = require('../../api/auth');
+
+const DEFAULT_STATS = { postCount: 12, likeCount: 34, msgCount: 56 };
+
 Page({
   data: {
-    userInfo: {
-      nickname: 'ECNU 小狮子',
-      avatar: 'https://mmbiz.qpic.cn/mmbiz_png/icTdbqWNOwNRna42FI242Lcia07afakS2Aia07v89ibYy6m6ia6qicic427XpA7S6jXicicicWtiaib6Qicibicia4iaa849Wic5Wv9Q/0',
-      bio: '热爱丽娃河，也爱樱桃河。',
-      bgImage: ''
-    },
-    unreadLikes: 2,
-    unreadComments: 5, 
+    isLoggedIn: false,
+    userInfo: { nickname: '', avatar: '', bio: '', bgImage: '' },
+    stats: { postCount: 12, likeCount: 34, msgCount: 56 },
+    unreadLikes: 0,
+    unreadComments: 0,
     currentTab: 0,
     displayList: [],
-    myPosts: [
-      { id: 1001, title: '丽娃河的猫：今天又在图书馆门口营业了', time: '2026-02-10', likes: 15 },
-      { id: 1002, title: '华师大樱桃河的晚霞真的无敌', time: '2026-02-09', likes: 21 }
-    ],
-    myComments: [
-      { id: 2001, postId: 1001, title: '我也见过它，它真的很亲人！', time: '2026-02-11' }
-    ]
+    myPosts: [],
+    myComments: []
   },
 
   onShow() {
-    // 每次进入页面重新获取缓存
-    const info = wx.getStorageSync('userInfo');
-    if (info) {
-      this.setData({
-        'userInfo.nickname': info.nickname || this.data.userInfo.nickname,
-        'userInfo.avatar': info.avatar || this.data.userInfo.avatar,
-        'userInfo.bio': info.bio || this.data.userInfo.bio,
-        'userInfo.bgImage': info.bgImage || this.data.userInfo.bgImage
-      });
+    const token = wx.getStorageSync('token');
+    const isLoggedIn = !!token;
+    this.setData({ isLoggedIn });
+
+    if (isLoggedIn) {
+      const info = wx.getStorageSync('userInfo');
+      if (info) {
+        this.setData({
+          'userInfo.nickname': info.nickname || '',
+          'userInfo.avatar': info.avatar || '',
+          'userInfo.bio': info.bio || '',
+          'userInfo.bgImage': info.bgImage || ''
+        });
+      }
+      this.fetchStats();
+    } else {
+      this.setData({ stats: DEFAULT_STATS });
     }
     this.refreshList();
+  },
+
+  fetchStats() {
+    authApi.getProfile().then((data) => {
+      const postCount = (data && data.postCount != null) ? data.postCount : DEFAULT_STATS.postCount;
+      const likeCount = (data && data.likeCount != null) ? data.likeCount : DEFAULT_STATS.likeCount;
+      const msgCount = (data && data.msgCount != null) ? data.msgCount : DEFAULT_STATS.msgCount;
+      this.setData({ stats: { postCount, likeCount, msgCount } });
+    }).catch(() => {
+      this.setData({ stats: DEFAULT_STATS });
+    });
   },
 
   changeBackground() {
@@ -59,7 +74,15 @@ Page({
   },
 
   goToEdit() {
+    if (!this.data.isLoggedIn) {
+      wx.navigateTo({ url: '/pages/login/login' });
+      return;
+    }
     wx.navigateTo({ url: '/pages/edit-profile/edit-profile' });
+  },
+
+  goToLogin() {
+    wx.navigateTo({ url: '/pages/login/login' });
   },
 
   refreshList() {

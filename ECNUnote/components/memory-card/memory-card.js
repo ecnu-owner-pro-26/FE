@@ -28,11 +28,8 @@ Component({
       });
     },
 
-    // 2. 新增：一个空函数，专门用来“截断”点击事件
-    // 防止点红心的时候，卡片也触发跳转详情页
-    prevent() {
-      // 什么都不用写，catchtap 会帮我们搞定一切
-    },
+    /** 空实现，在 catchtap 中调用以阻止点击冒泡至卡片，避免点红心时触发跳转详情 */
+    prevent() {},
 
     onTapCard() {
       wx.navigateTo({ url: `/pages/detail/detail?id=${this.data.item.id}` });

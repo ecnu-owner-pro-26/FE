@@ -45,7 +45,7 @@ Page({
   },
 
   /**
-   * 加载列表：有 locationId 用 GET /api/locations/:id/memories；无则尝试 GET /api/memories，失败用模拟数据
+   * 加载列表：有 locationId 用 GET /api/locations/:id/memories；无则 GET /api/memories，失败则列表为空
    */
   init() {
     if (this.data.loading || !this.data.hasMore) return;
@@ -83,7 +83,7 @@ Page({
       return;
     }
 
-    // 无 locationId：先请求 GET /api/memories（若后端支持），否则用模拟数据
+    // 无 locationId：请求 GET /api/memories
     const params = { page: this.data.p };
     if (this.data.c === 'hot') params.sort = 'hot';
     if (this.data.c !== 'all' && this.data.c !== 'hot') params.campus = this.data.c;
@@ -103,18 +103,7 @@ Page({
       }));
       done(list, list.length >= 10);
     }).catch(() => {
-      const mock = [
-        { id: 1, title: "丽娃河的猫", content: "为了过冬囤了不少肉。", location_name: "河西食堂", location_id: 101, view_count: 88, comment_count: 5, create_time: "刚刚", campus: "p", is_liked: false, like_count: 10 },
-        { id: 2, title: "理科楼自习", content: "期末复习中。", location_name: "理科大楼", location_id: 102, view_count: 120, comment_count: 8, create_time: "5分钟前", campus: "p", is_liked: true, like_count: 25 },
-        { id: 3, title: "樱桃河午后", content: "这里的樱花已经有花苞了。", location_name: "秋实阁", location_id: 201, view_count: 230, comment_count: 12, create_time: "1小时前", campus: "m", is_liked: false, like_count: 5 },
-        { id: 4, title: "实验楼夜色", content: "国软院的红墙配晚霞绝了。", location_name: "实验楼", location_id: 202, view_count: 90, comment_count: 3, create_time: "2小时前", campus: "m", is_liked: false, like_count: 5 }
-      ];
-      let res = this.data.c === 'hot' ? [...mock] : (this.data.c === 'all' ? mock : mock.filter(i => i.campus === this.data.c));
-      if (this.data.c === 'hot') {
-        const hotScore = (item) => (item.like_count || 0) * 2 + (item.comment_count || 0) + (item.view_count || 0);
-        res.sort((a, b) => hotScore(b) - hotScore(a));
-      }
-      done(res, this.data.p < 3);
+      done([], false);
     });
   },
 

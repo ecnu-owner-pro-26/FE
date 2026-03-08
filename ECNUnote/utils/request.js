@@ -1,20 +1,15 @@
 /**
- * 网络请求封装层
- * 核心功能：多环境管理、JWT自动注入、业务状态码拦截
- * 开发时：微信开发者工具 → 详情 → 本地设置 → 勾选「不校验合法域名」以便请求 http 测试地址
+ * 网络请求封装：多环境 BASE_URL、JWT 自动注入、HTTP 与业务状态码拦截
  */
-
-// 环境配置（与 ECNUnote文档/API_COMPLETE.md 一致）
 const ENV = {
   DEV: 'http://106.14.10.73:8080/api',
-  PROD: 'https://api.ecnunote.com/api' // 预留生产环境
+  PROD: 'https://api.ecnunote.com/api'
 };
-
-const BASE_URL = ENV.DEV; 
+const BASE_URL = ENV.DEV;
 
 /**
- * 发起请求：needAuth 为 true 时自动带 Authorization: Bearer <token>
- * 成功返回 body.data，失败统一 Toast 并 reject
+ * 发起 HTTP 请求。needAuth 为 true 时在 Header 中附加 Authorization: Bearer <token>
+ * 成功时 resolve body.data（若存在）或 body；失败时 Toast 并 reject
  */
 const request = (url, method = 'GET', data = {}, needAuth = true) => {
   return new Promise((resolve, reject) => {
@@ -38,8 +33,11 @@ const request = (url, method = 'GET', data = {}, needAuth = true) => {
       timeout: 10000,
       success: (res) => {
         const { statusCode, data: body } = res;
+        const isLoginReq = (url.indexOf('auth') !== -1 && (url.indexOf('login') !== -1 || url.indexOf('wechat') !== -1));
+        if (isLoginReq) {
+          console.log('[登录] 完整网络响应体:', JSON.stringify(body));
+        }
 
-        // 1. 拦截 HTTP 物理状态码（统一 reject 成 { code, message } 便于登录页区分）
         if (statusCode < 200 || statusCode >= 300) {
           if (statusCode === 401) {
             wx.removeStorageSync('token');
@@ -52,21 +50,13 @@ const request = (url, method = 'GET', data = {}, needAuth = true) => {
           return;
         }
 
-        // 2. 拦截业务逻辑状态码（body 可能为空）
         if (body && body.code !== undefined && body.code !== 200) {
-          // 15002 常见于后端改路由后接口不存在或路径变更，提示用户/开发者
-          const msg = body.code === 15002
-            ? (body.message || '接口已变更(15002)，请与后端确认新路由')
-            : (body.message || '业务逻辑错误');
-          wx.showToast({
-            title: msg,
-            icon: 'none'
-          });
+          const msg = body.message || ('错误码: ' + body.code);
+          wx.showToast({ title: msg, icon: 'none' });
           reject(body);
           return;
         }
 
-        // 3. 成功则返回数据体
         resolve(body && body.data !== undefined ? body.data : body);
       },
       fail: (err) => {
@@ -83,10 +73,10 @@ const request = (url, method = 'GET', data = {}, needAuth = true) => {
 };
 
 /**
- * 上传文件（用于微信快捷登录头像）
+ * 上传文件至 /upload，解析响应中的图片 URL 并返回
  * @param {string} filePath 本地临时路径
- * @param {string} name 后端接收的字段名，默认 avatar
- * @returns {Promise<string>} 返回后端返回的图片 URL
+ * @param {string} name 表单字段名，默认 avatar
+ * @returns {Promise<string>} 解析得到的 URL 或空字符串
  */
 const uploadFile = (filePath, name = 'avatar') => {
   return new Promise((resolve, reject) => {

@@ -152,11 +152,11 @@ Page({
 
     // 如果是匿名发布的，通常不允许查看主页
     
-    console.log("正在尝试跳转到用户主页，ID为:", userId);
+    console.log('[navigateTo] user-home id=', userId);
     wx.navigateTo({
       url: `/pages/user-home/user-home?id=${userId}`,
       fail: (err) => {
-        console.error("跳转失败，请检查 app.json 是否注册了该页面", err);
+        console.error('[navigateTo] fail', err);
         wx.showToast({ title: '页面还没创建', icon: 'none' });
       }
     });

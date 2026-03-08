@@ -2,33 +2,39 @@
   <nav-bar title="狮友资料" showBack="{{true}}" backgroundColor="transparent" color="#fff"></nav-bar>
 
   <view class="profile-header">
-    <image class="blur-bg" src="{{userInfo.avatar}}" mode="aspectFill"></image>
+    <image class="blur-bg" wx:if="{{userInfo.avatar}}" src="{{userInfo.avatar}}" mode="aspectFill"></image>
     <view class="mask"></view>
     
-    <view class="header-content">
+    <view class="header-content" wx:if="{{!notLoggedIn}}">
       <view class="avatar-wrapper">
         <image class="profile-avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
-        <view class="gender-tag {{userInfo.gender === 1 ? 'male' : 'female'}}">
+        <view class="gender-tag {{userInfo.gender === 1 ? 'male' : 'female'}}" wx:if="{{userInfo.gender}}">
           <text class="icon">{{userInfo.gender === 1 ? '♂' : '♀'}}</text>
         </view>
       </view>
       
       <view class="profile-text">
         <text class="profile-name">{{userInfo.nickname}}</text>
-        <view class="id-tag">ID: {{userId}}</view>
+        <view class="id-tag" wx:if="{{userId}}">ID: {{userId}}</view>
       </view>
       
       <text class="profile-bio">{{userInfo.bio || '这只狮子很神秘，还没写简介~'}}</text>
     </view>
+    <view class="header-content" wx:else>
+      <view class="profile-text">
+        <text class="profile-name">未登录</text>
+        <text class="profile-bio">登录后查看个人资料</text>
+      </view>
+    </view>
     
     <view class="stats-card">
       <view class="stat-item">
-        <text class="num">{{userInfo.post_count || 0}}</text>
+        <text class="num">{{stats.postCount}}</text>
         <text class="label">发布动态</text>
       </view>
       <view class="stat-divider"></view>
       <view class="stat-item">
-        <text class="num">{{userInfo.like_total || 0}}</text>
+        <text class="num">{{stats.likeCount}}</text>
         <text class="label">获得赞同</text>
       </view>
     </view>
