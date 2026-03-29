@@ -1,0 +1,67 @@
+<view class="detail-container">
+  <nav-bar title="树洞详情" showBack="{{true}}"></nav-bar>
+
+  <scroll-view scroll-y class="scroll-area">
+    <view class="main-content">
+      <view class="user-meta" bindtap="goToOthersProfile" data-userid="{{info.user_id}}">
+  <image class="avatar" src="{{info.avatar}}"></image>
+  <view class="user-info">
+    <text class="nickname">{{info.nickname || '点我跳转'}}</text>
+  </view>
+</view>
+
+      <view class="text-content">
+        <text class="title">{{info.title}}</text>
+        <text class="body">{{info.content}}</text>
+      </view>
+
+      <view class="image-gallery" wx:if="{{info.images.length}}">
+        <image 
+          wx:for="{{info.images}}" 
+          wx:key="*this" 
+          src="{{item}}" 
+          mode="widthFix" 
+        ></image>
+      </view>
+
+      <view class="info-footer">
+        <text>📍 {{info.location_name}}</text>
+        <text>👁️ {{info.view_count || 0}} 浏览</text>
+      </view>
+    </view>
+
+    <view class="interaction-bar">
+      <like-button 
+        isLiked="{{info.is_liked}}" 
+        cnt="{{info.like_count}}"
+        bind:change="onLikeTap"
+      ></like-button>
+      <text class="comment-total">共 {{comments.length}} 条评论</text>
+    </view>
+
+    <view class="comment-section">
+      <view class="section-title">全部评论</view>
+      <block wx:for="{{comments}}" wx:key="id">
+        <comment-item 
+          item="{{item}}" 
+          bind:reply="handleReplyTrigger"
+        ></comment-item>
+      </block>
+      <view class="no-more" wx:if="{{comments.length === 0}}">暂无留言，快来占个沙发</view>
+      <view style="height: 120rpx;"></view>
+    </view>
+  </scroll-view>
+
+  <view class="bottom-input-bar">
+    <input 
+      class="input-box" 
+      placeholder="{{inputPlaceholder}}" 
+      value="{{commentText}}"
+      focus="{{inputFocus}}"
+      bindinput="onInput"      
+      confirm-type="send"
+      bindconfirm="submitComment"
+    />
+    <view class="send-btn" bindtap="submitComment">发送</view>
+  </view>
+</view>

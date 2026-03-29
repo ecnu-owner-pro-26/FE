@@ -1,0 +1,30 @@
+page { background: #fff; height: 100vh; }
+.detail-container { display: flex; flex-direction: column; height: 100%; }
+.scroll-area { flex: 1; padding-bottom: 120rpx; }
+
+/* 内容区 */
+.main-content { padding: 30rpx; border-bottom: 20rpx solid #f7f7f7; }
+.user-meta { display: flex; align-items: center; margin-bottom: 30rpx; }
+.avatar { width: 80rpx; height: 80rpx; border-radius: 40rpx; margin-right: 20rpx; }
+.nickname { font-size: 30rpx; font-weight: bold; display: block; }
+.ip-tag { font-size: 22rpx; color: #999; }
+
+.text-content .title { font-size: 36rpx; font-weight: bold; display: block; margin-bottom: 20rpx; }
+.text-content .body { font-size: 32rpx; color: #333; line-height: 1.8; }
+.image-gallery image { width: 100%; border-radius: 12rpx; margin-top: 20rpx; }
+
+.info-footer { display: flex; justify-content: space-between; margin-top: 30rpx; font-size: 24rpx; color: #888; }
+
+/* 互动与评论 */
+.interaction-bar { padding: 30rpx; display: flex; justify-content: space-between; border-bottom: 1rpx solid #eee; }
+.comment-section { padding: 30rpx; }
+.section-title { font-size: 28rpx; font-weight: bold; color: #a41f35; margin-bottom: 30rpx; }
+
+/* 底部输入框 */
+.bottom-input-bar {
+  position: fixed; bottom: 0; width: 100%; height: 110rpx;
+  background: #fff; border-top: 1rpx solid #eee; display: flex;
+  align-items: center; padding: 0 30rpx; box-sizing: border-box;
+}
+.input-box { flex: 1; height: 70rpx; background: #f2f2f2; border-radius: 35rpx; padding: 0 30rpx; font-size: 28rpx; }
+.send-btn { margin-left: 30rpx; color: #a41f35; font-weight: bold; font-size: 30rpx; }

@@ -1,0 +1,71 @@
+<view class="post-container">
+  <view class="nav-bar">
+    <view class="back-btn" bindtap="goBack">←</view>
+    <text class="nav-title">记录记忆</text>
+  </view>
+
+  <scroll-view scroll-y class="content-body">
+    <view class="section-card">
+      <view class="section-title">标题</view>
+      <input
+        class="title-input"
+        placeholder="给这段记忆起个标题"
+        maxlength="30"
+        value="{{title}}"
+        bindinput="onTitleInput"
+      />
+    </view>
+
+    <view class="section-card">
+      <view class="section-title">内容</view>
+      <textarea
+        class="text-area"
+        placeholder="此刻你在想什么？"
+        bindinput="onInput"
+        maxlength="500"
+        value="{{content}}"
+      ></textarea>
+
+      <view class="image-list">
+        <block wx:for="{{tempImages}}" wx:key="*this">
+          <view class="image-item">
+            <image src="{{item}}" mode="aspectFill" bindtap="previewImage" data-src="{{item}}"></image>
+            <view class="del-icon" bindtap="removeImage" data-index="{{index}}">×</view>
+          </view>
+        </block>
+
+        <view class="add-box" bindtap="uploadImage" wx:if="{{tempImages.length < 9}}">
+          <text class="add-icon">+</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-card">
+      <view class="section-title">话题</view>
+      <view class="tag-list">
+        <view
+          wx:for="{{topicTagOptions}}"
+          wx:key="*this"
+          class="tag-item {{selectedTags.indexOf(item) > -1 ? 'active' : ''}}"
+          bindtap="toggleTopicTag"
+          hover-class="tag-item-hover"
+          data-index="{{index}}"
+        >
+          #{{item}}
+        </view>
+      </view>
+    </view>
+
+    <view class="section-card">
+      <view class="section-title">定位</view>
+      <view class="loc-preview">
+        <text>📍 {{lng}}</text>
+        <text wx:if="{{lat}}">, {{lat}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="footer">
+    <button class="submit-btn" bindtap="submit">发布到树洞</button>
+  </view>
+</view>

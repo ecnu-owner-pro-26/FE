@@ -1,0 +1,67 @@
+<view class="container">
+  <navigation-bar title="花狮广场" showBack="{{false}}"></navigation-bar>
+
+  <view class="search-wrap">
+    <input
+      class="search-input"
+      placeholder="搜索记忆标题 / 内容 / 地点"
+      value="{{keyword}}"
+      bindinput="onSearchInput"
+      confirm-type="search"
+    />
+    <view wx:if="{{keyword}}" class="search-clear" bindtap="clearSearch">清空</view>
+  </view>
+
+  <view wx:if="{{topicTag}}" class="topic-filter-bar">
+    <text class="topic-filter-text">当前话题：#{{topicTag}}</text>
+    <view class="topic-filter-clear" bindtap="clearTopicTag">取消筛选</view>
+  </view>
+
+  <view class="filter-bar">
+    <view class="f-item {{c === 'all' ? 'active' : ''}}" bindtap="sel" data-v="all">全部</view>
+    <view class="f-item {{c === 'hot' ? 'active' : ''}}" bindtap="sel" data-v="hot">热榜</view>
+    <view class="f-item {{c === 'p' ? 'active' : ''}}" bindtap="sel" data-v="p">普陀</view>
+    <view class="f-item {{c === 'm' ? 'active' : ''}}" bindtap="sel" data-v="m">闵行</view>
+    <view class="f-item {{c === 'd' ? 'active' : ''}}" bindtap="sel" data-v="d">滴水湖</view>
+  </view>
+
+  <view wx:if="{{c === 'hot'}}" class="rank-tabs">
+    <view class="rank-tab {{rankType === 'day' ? 'active' : ''}}" bindtap="switchRank" data-v="day">日榜</view>
+    <view class="rank-tab {{rankType === 'week' ? 'active' : ''}}" bindtap="switchRank" data-v="week">周榜</view>
+    <view class="rank-tab {{rankType === 'month' ? 'active' : ''}}" bindtap="switchRank" data-v="month">月榜</view>
+  </view>
+
+  <scroll-view scroll-y class="list-wrap">
+    <view class="memory-list">
+      <block wx:if="{{c !== 'hot'}}" wx:for="{{ls}}" wx:key="id">
+        <memory-card 
+          item="{{item}}" 
+          data-id="{{item.id}}" 
+          bindtap="goToDetail" 
+          bind:like="onCardLike"
+        ></memory-card>
+      </block>
+
+      <block wx:if="{{c === 'hot'}}" wx:for="{{ls}}" wx:key="id">
+        <view class="rank-item" bindtap="goToDetail" data-id="{{item.id}}">
+          <view class="rank-no">{{item.rank}}</view>
+          <view class="rank-main">
+            <view class="rank-title">{{item.title}}</view>
+            <view class="rank-content">{{item.content}}</view>
+            <view class="rank-meta">
+              <text class="meta-text">👁 {{item.view_count || 0}}</text>
+              <text class="meta-text">❤️ {{item.like_count || 0}}</text>
+              <text class="meta-text">💬 {{item.comment_count || 0}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <view class="status">
+        <text wx:if="{{loading}}">正在读取校区记忆...</text>
+        <view wx:if="{{!loading && hasMore}}" class="more-btn" bindtap="more">查看更多</view>
+        <text wx:if="{{!hasMore}}">—— 已经看到底了 ——</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

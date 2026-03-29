@@ -1,0 +1,10 @@
+<view class="comment-item">
+  <view class="user-row">
+    <text class="u-name">{{item.nickname}}</text>
+    <text class="u-time">{{item.create_time}}</text>
+  </view>
+  <view class="u-content" bindtap="onReply">
+    <text wx:if="{{item.reply_to}}" class="reply-tag">@{{item.reply_to}} </text>
+    <text>{{item.content}}</text>
+  </view>
+</view>

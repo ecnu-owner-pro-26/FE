@@ -1,0 +1,114 @@
+page { background-color: #f7f7f7; }
+.post-container { display: flex; flex-direction: column; height: 100vh; }
+
+.nav-bar {
+  height: 164rpx;
+  background: linear-gradient(135deg, #a41f35 0%, #8d182d 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 0 30rpx 22rpx;
+  position: relative;
+}
+.back-btn { color: #fff; font-size: 40rpx; margin-right: 30rpx; }
+.nav-title { color: #fff; font-size: 32rpx; font-weight: bold; }
+
+.content-body {
+  padding: 24rpx;
+  flex: 1;
+  box-sizing: border-box;
+}
+
+.section-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 26rpx 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 6rpx 18rpx rgba(0, 0, 0, 0.04);
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 18rpx;
+}
+
+.title-input {
+  width: 100%;
+  height: 80rpx;
+  border-radius: 14rpx;
+  background: #f4f6f9;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+.text-area {
+  width: 100%;
+  height: 260rpx;
+  background: #f4f6f9;
+  border-radius: 14rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
+  margin-bottom: 22rpx;
+}
+
+.image-list { display: flex; flex-wrap: wrap; gap: 20rpx; }
+
+.image-item { position: relative; width: 216rpx; height: 216rpx; }
+.image-item image { width: 100%; height: 100%; border-radius: 8rpx; }
+
+.del-icon {
+  position: absolute; top: -10rpx; right: -10rpx; width: 40rpx; height: 40rpx;
+  background: rgba(0,0,0,0.5); color: #fff; border-radius: 20rpx;
+  text-align: center; line-height: 36rpx; font-size: 30rpx;
+}
+
+.add-box {
+  width: 216rpx; height: 216rpx; background: #f2f3f5; border-radius: 8rpx;
+  display: flex; align-items: center; justify-content: center;
+}
+.add-icon { font-size: 80rpx; color: #ccc; }
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.tag-item {
+  font-size: 24rpx;
+  color: #666;
+  padding: 10rpx 22rpx;
+  border-radius: 28rpx;
+  background: #f3f4f6;
+}
+.tag-item-hover {
+  opacity: 0.8;
+}
+
+.tag-item.active {
+  color: #fff;
+  background: #a41f35;
+}
+
+.loc-preview {
+  font-size: 24rpx;
+  color: #888;
+  margin-bottom: 14rpx;
+}
+
+.footer {
+  padding: 20rpx 26rpx 34rpx;
+  background: #fff;
+  box-shadow: 0 -4rpx 14rpx rgba(0, 0, 0, 0.04);
+}
+.submit-btn {
+  background-color: #a41f35;
+  color: #fff;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  box-shadow: 0 10rpx 20rpx rgba(164,31,53,0.2);
+}
